@@ -31,9 +31,9 @@ int main(){
 
     if(v[0] == v[n-1]){
         // equalStart and equalEnds overlap
-        cout << ((n-1)*(n)/2) << endl;
+        cout << (v[n-1]-v[0]) << " " << ((n-1)*(n)/2) << endl;
     }
     else{
-        cout << (equalStart*equalEnds) << endl;
+        cout << (v[n-1]-v[0]) << " " << (equalStart*equalEnds) << endl;
     }
 }
