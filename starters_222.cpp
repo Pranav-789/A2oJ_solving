@@ -1,51 +1,62 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+long long solve(int i, int w, vector<int> &a, vector<vector<long long>> &dp)
+{
+    int n = a.size();
+    if (i == n)
+        return 0;
+
+    if (dp[i][w] != -1)
+        return dp[i][w];
+
+    long long ans = 0;
+
+    // After getting 1 free watch
+    int nw = w + 1;
+
+    // Sell 0 watches
+    ans = solve(i + 1, nw, a, dp);
+
+    // Sell 1 watch
+    if (nw >= 1)
+    {
+        ans = max(ans, a[i] + solve(i + 1, nw - 1, a, dp));
+    }
+
+    // Sell 2 watches
+    if (nw >= 2)
+    {
+        ans = max(ans, 2LL * a[i] + solve(i + 1, nw - 2, a, dp));
+    }
+
+    return dp[i][w] = ans;
+}
+
 int main()
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int t;
     cin >> t;
+
     while (t--)
     {
         int n;
         cin >> n;
-        vector<long long> a(n);
-        for (int i = 0; i < n; i++)
-            cin >> a[i];
 
-        long long profit = 0;
-        int watches = 0;
-
+        vector<int> a(n);
         for (int i = 0; i < n; i++)
         {
-            watches++;
-
-            bool better_ahead = false;
-            for (int j = i + 1; j < n; j++)
-            {
-                if (a[j] > a[i])
-                {
-                    better_ahead = true;
-                    break;
-                }
-            }
-
-            if (!better_ahead || i == n - 1)
-            {
-                int sell = min(2, watches);
-                profit += sell * a[i];
-                watches -= sell;
-            }
-            else if(watches >= 2){
-                int sellable = min(watches-1, 2);
-                profit += sellable * a[i];
-                watches -= sellable;
-            }
+            cin >> a[i];
         }
 
-        cout << profit << endl;
+        // Max watches possible = n
+        vector<vector<long long>> dp(n, vector<long long>(n + 1, -1));
+
+        cout << solve(0, 0, a, dp) << "\n";
     }
-    return 0;
 }
 
 // int t;
